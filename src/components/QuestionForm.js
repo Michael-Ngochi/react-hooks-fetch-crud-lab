@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function QuestionForm(props) {
+function QuestionForm({onSubmit}) {
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -11,15 +11,27 @@ function QuestionForm(props) {
   });
 
   function handleChange(event) {
+    const { name, value } = event.target;
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [name]: name === "correctIndex" ? parseInt(value) : value,
     });
   }
 
   function handleSubmit(event) {
-    event.preventDefault();
-    console.log(formData);
+    const structuredData = {
+      prompt: formData.prompt,
+      answers: [
+        formData.answer1,
+        formData.answer2,
+        formData.answer3,
+        formData.answer4
+      ],
+      correctIndex: formData.correctIndex
+    };
+  
+    console.log("Submitting:", structuredData);
+    onSubmit(structuredData);
   }
 
   return (
